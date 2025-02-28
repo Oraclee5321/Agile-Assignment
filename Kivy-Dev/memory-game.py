@@ -1,3 +1,4 @@
+import kivy
 from kivy.graphics import opengl_utils
 from kivy.app import App
 from kivy.graphics.opengl_utils import gl_get_version_major
