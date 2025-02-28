@@ -1,4 +1,6 @@
+from kivy.graphics import opengl_utils
 from kivy.app import App
+from kivy.graphics.opengl_utils import gl_get_version_major
 from kivy.uix.boxlayout import BoxLayout
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -6,18 +8,28 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import StringProperty
 from kivy.modules import inspector
+from kivy.utils import platform
 
 from kivymd.app import MDApp
 from kivymd.uix.card import MDCard
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.screenmanager import MDScreenManager
 import random
+gl_version = gl_get_version_major()
+
+if platform == 'win':
+    if gl_version <= 2:
+        import os
+        os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
+
+
 
 class Methods():
     pass
 
 class MemoryCard(MDCard):
     text = StringProperty()
+
 
     def button_test(self):
         if self.ids.img.opacity == 1:
@@ -49,7 +61,4 @@ class MemoryGameApp(MDApp):
             rgba.append(1)
 
             self.screens.get_screen('home').add(MemoryCard(text=str(x), md_bg_color=rgba))
-
-
-
 MemoryGameApp().run()
