@@ -1,4 +1,3 @@
-from kivy.graphics import opengl_utils
 from kivy.app import App
 from kivy.graphics.opengl_utils import gl_get_version_major
 from kivy.uix.boxlayout import BoxLayout
@@ -15,15 +14,6 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.screenmanager import MDScreenManager
 import random
-gl_version = gl_get_version_major()
-
-if platform == 'win':
-    if gl_version <= 2:
-        import os
-        os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
-
-
-
 class Methods():
     pass
 
