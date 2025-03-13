@@ -1,0 +1,35 @@
+<QuestionScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 20
+        spacing: 20
+
+        MDLabel:
+            text: root.question_text
+            theme_text_color: "Secondary"
+            halign: "center"
+            font_style: "H6"
+
+        GridLayout:
+            cols: 2
+            rows: 2
+            padding: 10
+            spacing: 10
+
+            MDRaisedButton:
+                text: root.option1
+                on_release: root.check_answer(root.option1)
+
+            MDRaisedButton:
+                text: root.option2
+                on_release: root.check_answer(root.option2)
+
+            MDRaisedButton:
+                text: root.option3
+                on_release: root.check_answer(root.option3)
+
+            MDRaisedButton:
+                text: root.option4
+                on_release: root.check_answer(root.option4)
+
+
