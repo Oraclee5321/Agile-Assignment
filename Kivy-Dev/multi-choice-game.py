@@ -18,6 +18,8 @@ if platform == 'win':
     if gl_version <= 2:
         import os
         os.environ['KIVY_GL_BACKEND'] = 'angle_sdl2'
+        set ['KIVY_WINDOW'] = 'dummy'
+
 
 
 class Methods():
@@ -43,9 +45,9 @@ class QuestionScreen(Screen):
         # Creating a list of Question objects
         self.questions = [
             Question("What letter do you make with one fist and a straight finger pointing up?", ["A", "B", "D", "L"], "D"),
-            Question("Which sign is made by making a 'C' shape with your hand?", ["C", "O", "G", "S"], "C"),
+            Question("Which letter do you make by putting two fingers together on your palm?", ["N", "O", "G", "S"], "N"),
             Question("Which letter is signed by making a fist with the thumb on top?", ["M", "A", "S", "T"], "A"),
-            Question("Which sign is made by holding up two fingers like a V?", ["V", "W", "U", "N"], "V")
+            Question("Which letter is made by holding two fingers apart on the palm?", ["V", "W", "U", "N"], "V")
         ]
         self.current_question_index = 0
         self.display_question()
@@ -83,7 +85,7 @@ class QuestionScreen(Screen):
 class QuizApp(MDApp):
     def build(self):
         self.sm = ScreenManager()
-        self.question_screen = QuestionScreen()  # No need for **kwargs here
+        self.question_screen = QuestionScreen()
         self.sm.add_widget(self.question_screen)
         return self.sm
 
