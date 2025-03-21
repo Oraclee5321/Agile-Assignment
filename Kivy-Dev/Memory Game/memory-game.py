@@ -76,22 +76,13 @@ class MemoryScreen(MDScreen):
     score = NumericProperty(0)
     lives = NumericProperty(6)
     current_card = None
+
+    def on_enter(self, *args):
+        self.generate_cards()
+
     def add(self, widget):
         self.ids.grid.add_widget(widget)
     pass
-
-class MemoryGameApp(MDApp):
-
-    def build(self): # Create Screen Manager
-        self.screens = MDScreenManager()
-        self.screens.add_widget(MemoryScreen(name='home'))
-        #size of home
-        Window.size = (500, 500)
-        inspector.create_inspector(Window, self.screens)
-        return self.screens
-
-    def on_start(self):
-        self.generate_cards()
 
     def generate_cards(self): # Generate Cards for memory game
         nums1, nums2 = [x for x in range(6)], [x for x in range(6)]
@@ -104,9 +95,9 @@ class MemoryGameApp(MDApp):
             x = nums1.pop()
             y = nums2.pop()
             rgba = [random.random() for _ in range(3)] + [1]
-            self.screens.get_screen('home').add(MemoryCard(text=str(x), id=str(x), md_bg_color=rgba))
-            self.screens.get_screen('home').add(MemoryCard(text=str(y), id=str(y), md_bg_color=rgba))
-        cards = copy.copy(self.screens.get_screen('home').ids.grid.children)
+            self.add(MemoryCard(text=str(x), id=str(x), md_bg_color=rgba))
+            self.add(MemoryCard(text=str(y), id=str(y), md_bg_color=rgba))
+        cards = copy.copy(self.ids.grid.children)
         x = 0
         y = -1
         while cards != []:
@@ -131,6 +122,17 @@ class MemoryGameApp(MDApp):
                 y = -1
             except AttributeError:
                 continue
+
+class MemoryGameApp(MDApp):
+
+    def build(self): # Create Screen Manager
+        self.screens = MDScreenManager()
+        self.screens.add_widget(MemoryScreen(name='home'))
+        #size of home
+        Window.size = (500, 500)
+        inspector.create_inspector(Window, self.screens)
+        return self.screens
+
 
 
 
