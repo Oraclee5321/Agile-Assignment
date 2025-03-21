@@ -45,7 +45,7 @@ class QuestionScreen(Screen):
         self.display_question()
 
     def display_question(self):
-        """Set the screen text to match the current question and options."""
+        #Set the screen text to match the current question and options.
         if self.current_question_index < len(self.questions):
             current = self.questions[self.current_question_index]
             self.question_text = current.question_text
@@ -58,7 +58,7 @@ class QuestionScreen(Screen):
             self.game_over()
 
     def check_answer(self, selected_option):
-        """Check if user’s choice matches the current question’s answer."""
+        #Check if user’s choice matches the current question’s answer.
         current = self.questions[self.current_question_index]
         if selected_option == current.answer:
             print("Correct Answer!")
@@ -67,7 +67,7 @@ class QuestionScreen(Screen):
         self.move_to_next_question()
 
     def move_to_next_question(self):
-        """Advance to the next question or end the game if out of questions."""
+        #Advance to the next question or end the game if out of questions.
         self.current_question_index += 1
         if self.current_question_index < len(self.questions):
             self.display_question()
@@ -76,7 +76,7 @@ class QuestionScreen(Screen):
             self.game_over()
 
     def game_over(self):
-        """Updates the screen to show a 'Quiz Over!' message and disable buttons."""
+        #Updates the screen to show a 'Quiz Over!' message and disable buttons.
         self.question_text = "Quiz Over!"
         self.option1 = ""
         self.option2 = ""
@@ -85,7 +85,7 @@ class QuestionScreen(Screen):
 
 class QuizApp(MDApp):
     def build(self):
-        #dont need this
+        #dont need this, as quizapp kivy auto loads quiz.kv and this was causing two screens to be built 
         # Load the KV layout
         #Builder.load_file("quiz.kv")
 
