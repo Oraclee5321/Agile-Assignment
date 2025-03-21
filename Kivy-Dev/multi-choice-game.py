@@ -21,25 +21,32 @@ class QuestionScreen(Screen):
         super().__init__(**kwargs)
         self.questions = [
             Question(
-                "What letter do you make with one fist and a straight finger pointing up?",
+                "What letter do you make holding your left index finger straight, the other fingers curled into your palm, and making semi circle with your right thumb and index finger?",
                 ["A", "B", "D", "L"],
                 "D"
             ),
             Question(
-                "Which letter do you make by putting two fingers together on your palm?",
+                "Which letter do you make by forming a fist, with the index and middle fingers extended and touching each other together on your other palm?",
                 ["N", "O", "G", "S"],
                 "N"
             ),
             Question(
-                "Which letter is signed by making a fist with the thumb on top?",
+                "Which letter is signed by making a fist with the index finger extended touching the opposing thumb?",
                 ["M", "A", "S", "T"],
                 "A"
             ),
             Question(
-                "Which letter is made by holding two fingers apart on the palm?",
+                "Which letter is made by holding two fingers apart on the palm while curling the other fingers in?",
                 ["V", "W", "U", "N"],
                 "V"
-            )
+            ),
+            Question(
+                "Which letter is made by holding both hands with their plams open and fingers together",
+                ["A", "Z", "P", "B"],
+                "B"
+            ),
+            
+
         ]
         self.current_question_index = 0
         self.display_question()
