@@ -11,7 +11,7 @@ class Dictionary(BoxLayout):
 
 class AlphabetCarousel(App):
     def build(self):
-        Builder.load_file("Kivy-Dev/dictionary.kv")
+        Builder.load_file("Kivy-Dev/Bibliography/dictionary.kv")
         carousel = Carousel(direction = 'right',loop = True)
         #list of the alphabet
         letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
