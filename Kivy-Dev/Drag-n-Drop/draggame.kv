@@ -4,7 +4,23 @@
     drag_distance: 0
     color: 0, 0, 0, 1
 
+<AnswerBox>:
+    canvas:
+        Color:
+            rgba: 1, 0, 0, 1  # Red color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 0.5, 0, 0, 1  # Darker red color
+        Rectangle:
+            pos: self.x + 10, self.y + 10  # Indent by 10 pixels
+            size: self.width - 20, self.height - 20  # Adjust size to account for indent
 
 <DragScreen>
     FloatLayout:
-        id: grid
+        id: float
+        GridLayout:
+            id: grid
+            cols: 1
+            rows: 5
