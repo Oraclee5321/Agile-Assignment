@@ -1,0 +1,137 @@
+<QuestionScreen>:
+    name: "question_screen"
+    # Light green background across the entire screen
+    canvas.before:
+        Color:
+            rgba: 0.8, 1, 0.8, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    MDCard:
+        orientation: "vertical"
+        size_hint: 0.5, 0.8
+        width: "450dp"
+        pos_hint: {"center_x": 0.5, "center_y": 0.5}
+        md_bg_color: 1, 1, 1, 1
+        #elevation: 8
+
+        # Thin black outline on the card
+        canvas.after:
+            Color:
+                rgba: 0, 0, 0, 1
+            Line:
+                width: 2
+                rectangle: (self.x, self.y, self.width, self.height)
+
+        spacing: "20dp"
+        padding: "20dp"
+
+        # Question text at the top, wrapping if needed
+        MDLabel:
+            text: root.question_text
+            font_style: "Title"
+            halign: "center"
+            valign: "middle"
+            text_size: self.width, self.height
+            size_hint_y: None
+            height: self.texture_size[1]
+            theme_text_color: "Primary"
+
+        GridLayout:
+            cols: 2
+            rows: 2
+            spacing: 20
+            # Let the grid wrap its content to the smallest bounding box
+            size_hint: None, None
+            width: self.minimum_width
+            height: self.minimum_height
+            pos_hint: {"center_x": 0.5}  # centers the grid horizontally in the card
+
+            MDButton: #button 1
+                style: "tonal"
+                theme_width: "Custom"
+                size_hint: None, None
+                size: "180dp", "50dp"
+                md_bg_color: 0.2, 0.5, 0.9, 1
+                on_release: root.check_answer(root.option1)
+
+                MDButtonText:
+                    text: root.option1
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            MDButton: #button 2
+                style: "tonal"
+                theme_width: "Custom"
+                size_hint: None, None
+                size: "180dp", "50dp"
+                md_bg_color: 0.2, 0.5, 0.9, 1
+                on_release: root.check_answer(root.option2)
+
+                MDButtonText:
+                    text: root.option2
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            MDButton: #button 3 
+                style: "tonal"
+                theme_width: "Custom"
+                size_hint: None, None
+                size: "180dp", "50dp"
+                md_bg_color: 0.2, 0.5, 0.9, 1
+                on_release: root.check_answer(root.option3)
+
+                MDButtonText:
+                    text: root.option3
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+            MDButton: #button 4
+                style: "tonal"
+                theme_width: "Custom"
+                size_hint: None, None
+                size: "180dp", "50dp"
+                md_bg_color: 0.2, 0.5, 0.9, 1
+                on_release: root.check_answer(root.option4)
+
+                MDButtonText:
+                    text: root.option4
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<MenuScreen>:
+    name: "menu_screen"
+    # Light green background across the entire screen
+    canvas.before:
+        Color:
+            rgba: 0.8, 1, 0.8, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "20dp"
+        padding: "20dp"
+
+        MDLabel:
+            text: "Select Difficulty"
+            halign: "center"
+            font_style: "Title"
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            spacing: "20dp"
+            padding: "20dp"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+
+            MDButton:
+                text: "Easy"
+                on_release:
+                    # Tell the app to set difficulty to 'easy' and switch to the question screen
+                    app.set_difficulty("easy")
+                    root.manager.current = "question_screen"
+
+            MDButton:
+                text: "Hard"
+                on_release:
+                    # Tell the app to set difficulty to 'hard' and switch to the question screen
+                    app.set_difficulty("hard")
+                    root.manager.current = "question_screen"
