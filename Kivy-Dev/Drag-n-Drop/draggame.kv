@@ -1,14 +1,10 @@
+<DragLabel>
+    drag_rectangle: self.x, self.y, self.width, self.height
+    drag_timeout: 10000000
+    drag_distance: 0
+    color: 0, 0, 0, 1
+
+
 <DragScreen>
-    BoxLayout:
-        orientation: 'vertical'
-        Label:
-            text: 'Drag the image to the target'
-        DragImage:
-            source: 'image.png'
-        DragTarget:
-            id: target
-            on_dropfile: root.dropfile(args[1])
-            on_dropwidget: root.dropwidget(args[1])
-        Button:
-            text: 'Reset'
-            on_press: target.clear()
+    FloatLayout:
+        id: grid
