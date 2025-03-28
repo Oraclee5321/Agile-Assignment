@@ -24,7 +24,7 @@ class QuestionScreen(Screen):
 
     def on_pre_enter(self, *args):
         app = MDApp.get_running_app()
-        questions_file = "Kivy-Dev/question-data.json"
+        questions_file = "Multi Game/question-data.json"
         self.questions_list = self.load_questions_from_json(questions_file)
     
         # If the chosen difficulty is 'hard',
