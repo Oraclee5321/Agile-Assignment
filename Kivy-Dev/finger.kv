@@ -3,7 +3,15 @@
 <Finger_text>: 
 	title: 'InputDialog'
 	auto_dismiss: False
-	id: test1 
+	id: test1
+    
+    # Light green background across the entire screen
+    canvas.before:
+        Color:
+            rgba: 0.8, 1, 0.8, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
 	# Using relative layout to arrange properly 
 	RelativeLayout: 

@@ -3,12 +3,17 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import StringProperty
 from kivymd.app import MDApp
+#importing question data from file
+import json
+from pathlib import Path
 
 class Question:
     def __init__(self, question_text, options, answer):
         self.question_text = question_text
         self.options = options
         self.answer = answer
+class MenuScreen(Screen):
+    pass
 
 class QuestionScreen(Screen):
     question_text = StringProperty('')
@@ -17,39 +22,34 @@ class QuestionScreen(Screen):
     option3 = StringProperty('')
     option4 = StringProperty('')
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.questions = [
-            Question(
-                "What letter do you make holding your left index finger straight, the other fingers curled into your palm, and making semi circle with your right thumb and index finger?",
-                ["A", "B", "D", "L"],
-                "D"
-            ),
-            Question(
-                "Which letter do you make by forming a fist, with the index and middle fingers extended and touching each other together on your other palm?",
-                ["N", "O", "G", "S"],
-                "N"
-            ),
-            Question(
-                "Which letter is signed by making a fist with the index finger extended touching the opposing thumb?",
-                ["M", "A", "S", "T"],
-                "A"
-            ),
-            Question(
-                "Which letter is made by holding two fingers apart on the palm while curling the other fingers in?",
-                ["V", "W", "U", "N"],
-                "V"
-            ),
-            Question(
-                "Which letter is made by holding both hands with their plams open and fingers together",
-                ["A", "Z", "P", "B"],
-                "B"
-            ),
-            
+    def on_pre_enter(self, *args):
+        app = MDApp.get_running_app()
+        questions_file = "Kivy-Dev/question-data.json"
+        self.questions_list = self.load_questions_from_json(questions_file)
+    
+        # If the chosen difficulty is 'hard',
+        # replace each question's text with "WIP".
+        if app.difficulty == "hard":
+            for q in self.questions_list:
+                q.update(
+                    question_text="WIP",
+                    options=["WIP"] * 4,
+                    answer="WIP")
 
-        ]
+        self.questions = [Question(**q) for q in self.questions_list]
         self.current_question_index = 0
         self.display_question()
+
+        
+    def load_questions_from_json(self, filename):
+        # Make sure the file path is correct
+        path = Path(filename)
+        if not path.is_file():
+            print(f"File not found: {filename}")
+            return []
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return data
 
     def display_question(self):
         #Set the screen text to match the current question and options.
@@ -64,15 +64,6 @@ class QuestionScreen(Screen):
             # If we somehow exceed the list, show "Quiz Over!"
             self.game_over()
 
-    def check_answer(self, selected_option):
-        #Check if user’s choice matches the current question’s answer.
-        current = self.questions[self.current_question_index]
-        if selected_option == current.answer:
-            print("Correct Answer!")
-        else:
-            print("Incorrect Answer.")
-        self.move_to_next_question()
-
     def move_to_next_question(self):
         #Advance to the next question or end the game if out of questions.
         self.current_question_index += 1
@@ -81,6 +72,15 @@ class QuestionScreen(Screen):
         else:
             print("Quiz Over!")
             self.game_over()
+
+    def check_answer(self, selected_option):
+        #Check if user’s choice matches the current question’s answer.
+        current = self.questions[self.current_question_index]
+        if selected_option == current.answer:
+            print("Correct Answer!")
+        else:
+            print("Incorrect Answer.")
+        self.move_to_next_question()
 
     def game_over(self):
         #Updates the screen to show a 'Quiz Over!' message and disable buttons.
@@ -91,14 +91,24 @@ class QuestionScreen(Screen):
         self.option4 = ""
 
 class QuizApp(MDApp):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.difficulty = None  # Will store either 'easy' or 'hard'
+
+    def set_difficulty(self, diff):
+        self.difficulty = diff
+
     def build(self):
         #dont need this, as quizapp kivy auto loads quiz.kv and this was causing two screens to be built 
         # Load the KV layout
         #Builder.load_file("quiz.kv")
-
-        # Create screen manager, add our QuestionScreen
+        # Create screen manager 
         sm = ScreenManager()
+        #add MenuScreen
+        sm.add_widget(MenuScreen(name="menu_screen"))
+        #add QuestionScreen
         sm.add_widget(QuestionScreen(name="question_screen"))
+        sm.current = "menu_screen"
         return sm
 
 if __name__ == "__main__":

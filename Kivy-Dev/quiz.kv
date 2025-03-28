@@ -1,4 +1,5 @@
 <QuestionScreen>:
+    name: "question_screen"
     # Light green background across the entire screen
     canvas.before:
         Color:
@@ -9,11 +10,11 @@
 
     MDCard:
         orientation: "vertical"
-        size_hint: None, None
-        size: "450dp", "450dp"
+        size_hint: 0.5, 0.8
+        width: "450dp"
         pos_hint: {"center_x": 0.5, "center_y": 0.5}
         md_bg_color: 1, 1, 1, 1
-        elevation: 8
+        #elevation: 8
 
         # Thin black outline on the card
         canvas.after:
@@ -32,7 +33,7 @@
             font_style: "Title"
             halign: "center"
             valign: "middle"
-            text_size: self.width, None
+            text_size: self.width, self.height
             size_hint_y: None
             height: self.texture_size[1]
             theme_text_color: "Primary"
@@ -51,7 +52,7 @@
                 style: "tonal"
                 theme_width: "Custom"
                 size_hint: None, None
-                size: "200dp", "50dp"
+                size: "180dp", "50dp"
                 md_bg_color: 0.2, 0.5, 0.9, 1
                 on_release: root.check_answer(root.option1)
 
@@ -63,7 +64,7 @@
                 style: "tonal"
                 theme_width: "Custom"
                 size_hint: None, None
-                size: "200dp", "50dp"
+                size: "180dp", "50dp"
                 md_bg_color: 0.2, 0.5, 0.9, 1
                 on_release: root.check_answer(root.option2)
 
@@ -75,7 +76,7 @@
                 style: "tonal"
                 theme_width: "Custom"
                 size_hint: None, None
-                size: "200dp", "50dp"
+                size: "180dp", "50dp"
                 md_bg_color: 0.2, 0.5, 0.9, 1
                 on_release: root.check_answer(root.option3)
 
@@ -87,10 +88,50 @@
                 style: "tonal"
                 theme_width: "Custom"
                 size_hint: None, None
-                size: "200dp", "50dp"
+                size: "180dp", "50dp"
                 md_bg_color: 0.2, 0.5, 0.9, 1
                 on_release: root.check_answer(root.option4)
 
                 MDButtonText:
                     text: root.option4
                     pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<MenuScreen>:
+    name: "menu_screen"
+    # Light green background across the entire screen
+    canvas.before:
+        Color:
+            rgba: 0.8, 1, 0.8, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    BoxLayout:
+        orientation: "vertical"
+        spacing: "20dp"
+        padding: "20dp"
+
+        MDLabel:
+            text: "Select Difficulty"
+            halign: "center"
+            font_style: "Title"
+
+        MDBoxLayout:
+            orientation: "horizontal"
+            spacing: "20dp"
+            padding: "20dp"
+            size_hint: 0.5, 0.2
+            pos_hint: {"center_x": 0.5}
+
+            MDButton:
+                text: "Easy"
+                on_release:
+                    # Tell the app to set difficulty to 'easy' and switch to the question screen
+                    app.set_difficulty("easy")
+                    root.manager.current = "question_screen"
+
+            MDButton:
+                text: "Hard"
+                on_release:
+                    # Tell the app to set difficulty to 'hard' and switch to the question screen
+                    app.set_difficulty("hard")
+                    root.manager.current = "question_screen"

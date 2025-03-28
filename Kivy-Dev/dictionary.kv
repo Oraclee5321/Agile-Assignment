@@ -1,0 +1,36 @@
+<Dictionary>:
+    orientation: 'vertical'
+    padding: 20
+    spacing: 20
+    # Light green background across the entire screen
+    canvas.before:
+        Color:
+            rgba: 0.8, 1, 0.8, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    Label:
+        text: root.letter
+        font_size: '50sp'
+        bold: True
+        color: 0, 0, 0, 1
+        # Thin black outline on the card
+        canvas.after:
+            Color:
+                rgba: 0, 0, 0, 1
+            Line:
+                width: 2
+                rectangle: (self.x, self.y, self.width, self.height)
+
+
+    AsyncImage:
+        source: "Kivy-Dev/Finger-Sign-BSL/" + root.letter + ".jpg"
+        fit_mode: "contain"
+        # Thin black outline on the card
+        canvas.after:
+            Color:
+                rgba: 0, 0, 0, 1
+            Line:
+                width: 2
+                rectangle: (self.x, self.y, self.width, self.height)
+

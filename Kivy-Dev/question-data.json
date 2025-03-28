@@ -1,0 +1,133 @@
+
+[
+    {
+        "question_text": "What letter do you make holding your left index finger straight, the other fingers curled into your palm, and making semi-circle with your right thumb and index finger?",
+        "options": ["A", "B", "D", "L"],
+        "answer": "D"
+    },
+    {
+        "question_text": "Which letter do you make by forming a fist, with the index and middle fingers extended and touching each other together on your other palm?",
+        "options": ["N", "O", "G", "S"],
+        "answer": "N"
+    },
+    {
+        "question_text": "Which letter is signed by making a fist with the index finger extended touching the opposing thumb?",
+        "options": ["M", "A", "S", "T"],
+        "answer": "A"
+    },
+    {
+        "question_text": "Which letter is made by holding two fingers apart on the palm while curling the other fingers in?",
+        "options": ["V", "W", "U", "N"],
+        "answer": "V"
+    },
+    {
+        "question_text": "Which letter is made by holding both hands with their plams open and fingers together",
+        "options": ["A", "Z", "P", "B"],
+        "answer": "B"
+    },
+    {
+        "question_text": "Which letter is formed by shaping your hand into a fist and your index finger and thumb into semi-circle?",
+        "options": ["O", "C", "U", "G"],
+        "answer": "C"
+    },
+    {
+        "question_text": "What letter do you make by shaping your both hands into a fist, with your right fist above the left?",
+        "options": ["H", "L", "G", "J"],
+        "answer": "G"
+    },
+    {
+        "question_text": "Which letter is formed by putting the tips of all your fingers so they rest on your left palm then swiping down?",
+        "options": ["N", "H", "M", "Y"],
+        "answer": "H"
+    },
+    {
+        "question_text": "Which letter is signed by touching the tip of your index finger with your opposing index finger?",
+        "options": ["E", "O", "I", "S"],
+        "answer": "E"
+    },
+    {
+        "question_text": "Which letter is made by forming a fist, with the index and middle fingers extended, with both hands and then crossing the fingers?",
+        "options": ["F", "R", "K", "U"],
+        "answer": "F"
+    },
+    {
+        "question_text": "Which letter is signed by touching the tip of your middle finger with your opposing index finger?",
+        "options": ["I", "T", "X", "S"],
+        "answer": "I"
+    },
+    {
+        "question_text": "Which letter is signed by extending the index finger and drawing a shape on the palm, while the other fingers remain folded in?",
+        "options": ["I", "J", "R", "P"],
+        "answer": "J"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["K", "V", "W", "M"],
+        "answer": "K"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["T", "L", "F", "E"],
+        "answer": "L"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["N", "W", "M", "S"],
+        "answer": "M"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["O", "E", "U", "Q"],
+        "answer": "O"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["P", "R", "T", "X"],
+        "answer": "P"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["Q", "G", "D", "B"],
+        "answer": "Q"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["R", "X", "K", "E"],
+        "answer": "R"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["T", "S", "B", "O"],
+        "answer": "S"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["T", "N", "U", "H"],
+        "answer": "T"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["V", "U", "W", "I"],
+        "answer": "U"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["W", "E", "M", "H"],
+        "answer": "W"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["X", "R", "C", "H"],
+        "answer": "X"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["Y", "G", "V", "L"],
+        "answer": "Y"
+    },
+    {
+        "question_text": "M V P",
+        "options": ["Z", "X", "T", "R"],
+        "answer": "Z"
+    }
+]
