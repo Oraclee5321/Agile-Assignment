@@ -5,11 +5,11 @@ from kivy.uix.textinput import Textinput
 from kivy.uix.relativelayout import RelativeLayout
 
 # Create the widget
-class text(Widget): 
+class Finger_text(Widget): 
     pass
   
 # Create the app
-class MainApp(App): 
+class FingerApp(App): 
   
     # Building text input 
     def build(self): 
@@ -23,5 +23,5 @@ class MainApp(App):
   
 # Run the App 
 if __name__ == "__main__": 
-    MainApp().run() 
+    FingerApp().run() 
 
