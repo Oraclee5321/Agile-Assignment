@@ -1,1 +1,14 @@
 <DragScreen>
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Drag the image to the target'
+        DragImage:
+            source: 'image.png'
+        DragTarget:
+            id: target
+            on_dropfile: root.dropfile(args[1])
+            on_dropwidget: root.dropwidget(args[1])
+        Button:
+            text: 'Reset'
+            on_press: target.clear()

@@ -19,6 +19,8 @@ import random
 import os
 
 class DragGameScreen(MDScreen):
+     score = NumericProperty(0)
+     def
     pass
 
 class DragGameApp(MDApp):
@@ -29,3 +31,5 @@ class DragGameApp(MDApp):
         Window.size = (500, 500)
         inspector.create_inspector(Window, self.screens)
         return self.screens
+
+DragGameApp().run()
