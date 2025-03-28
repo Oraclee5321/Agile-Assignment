@@ -10,6 +10,21 @@ import requests
 from requests.auth import HTTPBasicAuth
 from abc import ABC, abstractmethod
 from enum import Enum, auto
+from dataclasses import dataclass
+
+
+class GameScore:
+    pass
+
+
+class Badge:
+    # Or should i just have BadgeData that contains the info
+    # What does a badge need:
+    #   progress % float
+    #   completion bool
+    #   name str
+    #   description str
+    pass
 
 
 class _InternalUserData:
@@ -22,39 +37,21 @@ class _InternalUserData:
     """
 
     def __init__(self, username, password):
-        self.username = username
+        self.username: str = username
         # This is obviously stupid, its just temporary
-        self.password = password
+        self.password: str = password
 
-        self.coins = 0
+        self.coins: int = 0
         self.progression = None
-        self.customisation = None
-        self.badges = None
-        self.scores = None
-        self.daily_challenge_completed = False
+        self.badges = dict[str, Badge]
+        self.game_scores: dict[str, GameScore] = {}
+        # self.daily_challenge_completed = False
 
 
-class LoginStatus(Enum):
-    INTERNAL_SERVER_ERROR = auto()
-    NETWORK_ERROR = auto()
-    SUCCESS = auto()
-    INVALID_LOGIN = auto()
-    ALREADY_LOGGED_IN = auto()
-
-    # Potential statuses to be implemented serverside first
-    # TOO_MANY_ATTEMPTS = auto()
-
-
-class RegisterStatus(Enum):
-    INTERNAL_SERVER_ERROR = auto()
-    NETWORK_ERROR = auto()
-    SUCCESS = auto()
-    USERNAME_TAKEN = auto()
-
-    # Potential statuses to be implemented serverside first
-    # Currently no established rules on what can be a username and password
-    # INVALID_USERNAME = auto()
-    # INVALID_PASSWORD = auto()
+@dataclass
+class AuthResponse:
+    success: bool
+    message: str | None = None
 
 
 class ApiClientInterface(ABC):
@@ -69,7 +66,7 @@ class ApiClientInterface(ABC):
         """
 
     @abstractmethod
-    def login(self, username: str, password: str) -> LoginStatus:
+    def login(self, username: str, password: str) -> AuthResponse:
         """
         [TODO]: Documentation
         """
@@ -81,7 +78,7 @@ class ApiClientInterface(ABC):
         """
 
     @abstractmethod
-    def register(self, username: str, password: str) -> RegisterStatus:
+    def register(self, username: str, password: str) -> AuthResponse:
         """
         [TODO]: Documentation
         """
@@ -105,11 +102,9 @@ class MockApiClient(ApiClientInterface):
     def __init__(self):
         # Currently just using a dictionary for data storage
         self.__users: dict[str, _InternalUserData] = {}
-        self.__requests_session = requests.Session()
         # Temporary, just determines which user is logged in.
         # Replace later by creating an auth class inherited from
         # requests.Auth.AuthBase and use a JWT or something
-        #
         # Dont do it in this class, make a seperate real ApiClient
         # class that interacts with server and ensure interface are the same.
         # Test against eeach other when testing them.
@@ -118,29 +113,34 @@ class MockApiClient(ApiClientInterface):
     def logged_in(self) -> bool:
         return self.__current_user is not None
 
-    def login(self, username: str, password: str) -> LoginStatus:
-        if self.logged_in():
-            return LoginStatus.ALREADY_LOGGED_IN
+    def login(self, username: str, password: str) -> AuthResponse:
+        if self.__current_user is not None:
+            return AuthResponse(False, "User already logged in")
 
         # Again, this is stupid. Its temporary
         user: _InternalUserData | None = self.__users.get(username)
         # if user exists and password is correct
         if user and user.password == password:
             self.__current_user = user
-            return LoginStatus.SUCCESS
+            return AuthResponse(True)
         else:
-            return LoginStatus.INVALID_LOGIN
+            return AuthResponse(False, "Invalid credentials")
 
     def logout(self):
         self.__current_user = None
 
-    def register(self, username: str, password: str) -> RegisterStatus:
+    def register(self, username: str, password: str) -> AuthResponse:
         # If user does not exist
+        if len(username) < 4:
+            return AuthResponse(False, "Username must be above 4 characters")
+        if len(password) < 4:
+            return AuthResponse(False, "Password must be above 4 characters")
+
         if not self.__users.get(username, False):
             self.__users[username] = _InternalUserData(username, password)
-            return RegisterStatus.SUCCESS
+            return AuthResponse(True)
         else:
-            return RegisterStatus.USERNAME_TAKEN
+            return AuthResponse(False, "Username taken")
 
     def get_username(self) -> str:
         if self.__current_user is not None:
@@ -151,5 +151,11 @@ class MockApiClient(ApiClientInterface):
     def get_coins(self) -> int:
         if self.__current_user is not None:
             return self.__current_user.coins
+        else:
+            raise PermissionError
+
+    def add_coins(self, coins: int):
+        if self.__current_user is not None:
+            self.__current_user.coins += coins
         else:
             raise PermissionError

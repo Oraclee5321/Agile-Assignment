@@ -5,7 +5,7 @@ from kivy.uix.label import Label
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 
-from api_client import ApiClientInterface, MockApiClient, LoginStatus, RegisterStatus
+from api_client import ApiClientInterface, MockApiClient, AuthResponse
 
 
 class RegisterScreen(Screen):
@@ -16,7 +16,7 @@ class RegisterScreen(Screen):
     # [Todo]:
     #     Documentation
     #     Improve UI
-    #     Check for bad input e.g. empty field (should also be checked serverside, just to reduce requests)
+    #     Check for bad input e.g. empty field (should also be checked serverside)
     #     Add parameter for what screen this goes to on register
 
     def __init__(self, api_client: ApiClientInterface, **kwargs):
@@ -47,18 +47,18 @@ class RegisterScreen(Screen):
         self.add_widget(layout)
 
     def register(self, instance):
-        register_status: RegisterStatus = self.api_client.register(
+        register_status: AuthResponse = self.api_client.register(
             self.username.text, self.password.text
         )
 
-        if register_status == RegisterStatus.SUCCESS:
+        if register_status.success:
             self.username.text = ""
             self.password.text = ""
             # [Todo]: Make the screen this redirects to a constructor argument
             self.manager.current = "stats"
         else:
             # Handle specific failures later
-            self.error_label.text = "Register Failed"
+            self.error_label.text = register_status.message
 
     def on_pre_leave(self, *args):
         self.username.text = ""
@@ -109,16 +109,16 @@ class LoginScreen(Screen):
 
     def login(self, instance):
         # login
-        login_status: LoginStatus = self.api_client.login(
+        login_status: AuthResponse = self.api_client.login(
             self.username.text, self.password.text
         )
 
-        if login_status == LoginStatus.SUCCESS:
+        if login_status.success:
             # [Todo]: Make the screen this redirects to a constructor argument
             self.manager.current = "stats"
         else:
             # Handle specific failures later
-            self.error_label.text = "Login Failed"
+            self.error_label.text = login_status.message
 
     def on_pre_leave(self, *args):
         self.username.text = ""
