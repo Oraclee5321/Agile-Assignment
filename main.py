@@ -47,6 +47,37 @@ class MainScreen(Screen):
     def start_game(self, instance):
         self.manager.current = 'adventure'
 
+class LoginScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        layout = RelativeLayout()
+
+        self.background = Image(source='background_adventure.png.jpg', allow_stretch=True, keep_ratio=False)
+        layout.add_widget(self.background)
+
+        content = BoxLayout(orientation='vertical', spacing=10, padding=20, size_hint=(0.7, 0.6), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        label = Label(text="Log In", font_size='24sp')
+        content.add_widget(label)
+
+        self.username = TextInput(hint_text="Username", size_hint=(1, 0.2))
+        self.password = TextInput(hint_text="Password", password=True, size_hint=(1, 0.2))
+        content.add_widget(self.username)
+        content.add_widget(self.password)
+
+        login_button = Button(text="Log In", size_hint=(0.6, 0.2))
+        login_button.bind(on_press=self.login)
+        content.add_widget(login_button)
+
+        back_button = Button(text="Back", size_hint=(0.4, 0.2))
+        back_button.bind(on_press=lambda instance: self.manager.current == 'adventure')
+        content.add_widget(back_button)
+
+        layout.add_widget(content)
+        self.add_widget(layout)
+
+    def login(self, instance):
+        print(f"Logging in with {self.username.text}")
+
 
 class AdventureScreen(Screen):
     def __init__(self, **kwargs):
