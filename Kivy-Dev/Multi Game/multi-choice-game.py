@@ -13,7 +13,12 @@ class Question:
         self.options = options
         self.answer = answer
 class MenuScreen(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.difficulty = "easy"  # Will store either 'easy' or 'hard'
+
+    def set_difficulty(self, diff):
+        self.difficulty = diff
 
 class QuestionScreen(Screen):
     question_text = StringProperty('')
@@ -23,7 +28,7 @@ class QuestionScreen(Screen):
     option4 = StringProperty('')
 
     def on_pre_enter(self, *args):
-        app = MDApp.get_running_app()
+        app = App.get_running_app()
         questions_file = "Multi Game/question-data.json"
         self.questions_list = self.load_questions_from_json(questions_file)
     
@@ -43,9 +48,9 @@ class QuestionScreen(Screen):
         
     def load_questions_from_json(self, filename):
         # Make sure the file path is correct
-        path = Path(filename)
+        path = Path(Kivy-Dev/Multi Game/question-data.json)
         if not path.is_file():
-            print(f"File not found: {filename}")
+            print(f"File not found: {Kivy-Dev/Multi Game/question-data.json}")
             return []
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
@@ -78,6 +83,8 @@ class QuestionScreen(Screen):
         current = self.questions[self.current_question_index]
         if selected_option == current.answer:
             print("Correct Answer!")
+            # user got it right, add coin
+            app.player.coins += 1
         else:
             print("Incorrect Answer.")
         self.move_to_next_question()
@@ -90,7 +97,7 @@ class QuestionScreen(Screen):
         self.option3 = ""
         self.option4 = ""
 
-class QuizApp(MDApp):
+class MultiQuizApp(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.difficulty = None  # Will store either 'easy' or 'hard'
@@ -101,15 +108,15 @@ class QuizApp(MDApp):
     def build(self):
         #dont need this, as quizapp kivy auto loads quiz.kv and this was causing two screens to be built 
         # Load the KV layout
-        #Builder.load_file("quiz.kv")
+        Builder.load_file("multi_quiz.kv")
         # Create screen manager 
         sm = ScreenManager()
         #add MenuScreen
-        sm.add_widget(MenuScreen(name="menu_screen"))
+        sm.add_widget(MenuScreen(name="multi_menu_screen"))
         #add QuestionScreen
-        sm.add_widget(QuestionScreen(name="question_screen"))
+        sm.add_widget(QuestionScreen(name="multi_question_screen"))
         sm.current = "menu_screen"
         return sm
 
 if __name__ == "__main__":
-    QuizApp().run()
+    MultiQuizApp().run()
