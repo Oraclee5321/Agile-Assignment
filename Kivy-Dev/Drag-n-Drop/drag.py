@@ -27,6 +27,17 @@ class DragLabel(DragBehavior, Label):
     text = StringProperty()
     id = StringProperty()
 
+class AnswerContainer(GridLayout):
+    def __init__(self, **kwargs):
+        super(AnswerContainer, self).__init__(**kwargs)
+
+        for x in range(5):
+            new_box = AnswerBox()
+            new_box.id = str(x)
+            new_box.size_hint = (0.1, 0.2)
+            self.add_widget(new_box)
+
+
 class AnswerBox(Widget):
     id = StringProperty()
 
@@ -43,12 +54,8 @@ class DragScreen(MDScreen):
             item.pos = random.randint(0, 500), random.randint(0, 500)
 
     def generate_answer_boxes(self):
-        for x in range(5):
-            new_box = AnswerBox()
-            new_box.id = str(x)
-            new_box.size_hint = (0.1, 0.2)
-            self.ids.grid.add_widget(new_box)
-        pass
+        self.ids.float.add_widget(AnswerContainer())
+
 
     def on_enter(self, *args):
         self.generate_drag_boxes()
