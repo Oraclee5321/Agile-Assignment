@@ -3,30 +3,22 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.utils import get_color_from_hex
 from kivy.uix.scatter import Scatter
 from kivy.uix.gridlayout import GridLayout
 
-
-class GameManager:
-    def __init__(self):
-        self.player = Player()
-
-class Player:
-    def __init__(self, name="Explorer"):
-        self.name = name
-        self.coins = 50  
-        self.inventory = []
-
-game = GameManager()
+from api_client import MockApiClient
+from game_manager import GameManager 
 
 
 class MainScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, game_manager:GameManager, **kwargs):
         super().__init__(**kwargs)
         layout = RelativeLayout()
+        self.game_manager = game_manager
 
         self.background = Image(source='background_adventure.png.jpg', allow_stretch=True, keep_ratio=False)
         layout.add_widget(self.background)
@@ -41,15 +33,28 @@ class MainScreen(Screen):
         self.start_button.bind(on_press=self.start_game)
         content.add_widget(self.start_button)
 
+        self.debug_login_button = Button(text='Debug Login', size_hint=(0.6, 0.1), pos_hint={'center_x': 0.5}, background_normal='')
+        self.debug_login_button.background_color = get_color_from_hex('#6fe813')
+        self.debug_login_button.bind(on_press=self.debug_login)
+        content.add_widget(self.debug_login_button)
+
         layout.add_widget(content)
         self.add_widget(layout)
 
+
     def start_game(self, instance):
-        self.manager.current = 'adventure'
+        self.manager.current = 'login'
+
+    def debug_login(self, instance):
+        # temporary debug login to skip register and login screens for testing
+        self.game_manager.api_client.register("debug_user", "debug_password")
+        self.game_manager.api_client.login("debug_user", "debug_password")
+        self.manager.current = "adventure"
 
 class LoginScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, game_manager:GameManager, **kwargs):
         super().__init__(**kwargs)
+        self.game_manager = game_manager 
         layout = RelativeLayout()
 
         self.background = Image(source='background_adventure.png.jpg', allow_stretch=True, keep_ratio=False)
@@ -68,19 +73,82 @@ class LoginScreen(Screen):
         login_button.bind(on_press=self.login)
         content.add_widget(login_button)
 
+        register_button = Button(text="Create new account", size_hint=(0.6, 0.2))
+        register_button.bind(on_press=self.open_register)
+        content.add_widget(register_button)
+
         back_button = Button(text="Back", size_hint=(0.4, 0.2))
-        back_button.bind(on_press=lambda instance: self.manager.current == 'adventure')
+        back_button.bind(on_press=self.go_back)
         content.add_widget(back_button)
 
         layout.add_widget(content)
         self.add_widget(layout)
 
     def login(self, instance):
-        print(f"Logging in with {self.username.text}")
+        # this needs to actually display messages depending on what went wrong
+        login_status = self.game_manager.api_client.login(
+            self.username.text, self.password.text
+        )
+        if login_status.success:
+            self.manager.current = "adventure"
+        else:
+            print(login_status.message)
+
+    def open_register(self, instance):
+        self.manager.current = "register"
+
+    def go_back(self, instance):
+        self.manager.current = "main"
+
+
+class RegisterScreen(Screen):
+    def __init__(self, game_manager:GameManager, **kwargs):
+        super().__init__(**kwargs)
+        self.game_manager = game_manager
+        layout = RelativeLayout()
+
+        self.background = Image(source='background_adventure.png.jpg', allow_stretch=True, keep_ratio=False)
+        layout.add_widget(self.background)
+
+        content = BoxLayout(orientation='vertical', spacing=10, padding=20, size_hint=(0.7, 0.6), pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        label = Label(text="Register", font_size='24sp')
+        content.add_widget(label)
+
+        self.username = TextInput(hint_text="Username", size_hint=(1, 0.2))
+        self.password = TextInput(hint_text="Password", password=True, size_hint=(1, 0.2))
+        content.add_widget(self.username)
+        content.add_widget(self.password)
+
+        register_button = Button(text="Register", size_hint=(0.6, 0.2))
+        register_button.bind(on_press=self.register)
+        content.add_widget(register_button)
+
+        back_button = Button(text="Back", size_hint=(0.4, 0.2))
+        back_button.bind(on_press=self.go_back)
+        content.add_widget(back_button)
+
+        layout.add_widget(content)
+        self.add_widget(layout)
+
+    def register(self, instance):
+        # curently just sends back to login on successful register
+        # also needs to have status messages for what went wrong and 
+        # to tell user they just created an account
+        register_status = self.game_manager.api_client.register(
+            self.username.text,
+            self.password.text
+        )
+        if register_status.success:
+            self.manager.current = "login"
+        else:
+            print(register_status.message)
+
+    def go_back(self, instance):
+        self.manager.current = "login"
 
 
 class AdventureScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, game_manager:GameManager, **kwargs):
         super().__init__(**kwargs)
         layout = RelativeLayout()
 
@@ -92,8 +160,10 @@ class AdventureScreen(Screen):
         content.add_widget(label)
 
         button_data = [
-            ("Log in", self.log_in),
-            ("Begin Adventure", self.begin_adventure),
+            # ("Log in", self.log_in),
+            # ("Begin Adventure", self.begin_adventure),
+            ("Memory Game", self.open_memory_game),
+            ("Signs", self.open_signs),
             ("Options", self.open_options),
             ("Shop", self.open_shop),
             ("Virtual Room", self.open_virtual_room),
@@ -112,8 +182,16 @@ class AdventureScreen(Screen):
     def log_in(self, instance):
         print("Log in button pressed")
 
-    def begin_adventure(self, instance):
-        print("Begin Adventure button pressed")
+    def open_signs(self, instance):
+        # self.manager.current = "signs"
+        pass
+
+    def open_memory_game(self, instance):
+        # self.manager.current = "memory_game"
+        pass
+
+    # def begin_adventure(self, instance):
+    #     print("Begin Adventure button pressed")
 
     def open_options(self, instance):
         self.manager.current = 'options'
@@ -129,7 +207,7 @@ class AdventureScreen(Screen):
 
 
 class OptionsScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, game_manager:GameManager, **kwargs):
         super().__init__(**kwargs)
         layout = RelativeLayout()
 
@@ -139,7 +217,6 @@ class OptionsScreen(Screen):
         content = BoxLayout(orientation='vertical', spacing=10, padding=20)
         label = Label(text="Options Menu", font_size='24sp')
         content.add_widget(label)
-
 
         resume_button = Button(text="Resume", size_hint=(0.6, 0.1))
         mute_button = Button(text="Mute Sound", size_hint=(0.6, 0.1))
@@ -164,7 +241,7 @@ class OptionsScreen(Screen):
 
 
 class ShopScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, game_manager:GameManager, **kwargs):
         super().__init__(**kwargs)
         layout = RelativeLayout()
 
@@ -208,7 +285,7 @@ class ShopScreen(Screen):
 
 
 class VirtualRoomScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, game_manager:GameManager, **kwargs):
         super().__init__(**kwargs)
         layout = RelativeLayout()
 
@@ -245,15 +322,17 @@ class VirtualRoomScreen(Screen):
     def go_back(self, instance):
         self.manager.current = 'main'
 
-
 class WanderingLandApp(App):
     def build(self):
+        gs = GameManager(MockApiClient())
         sm = ScreenManager()
-        sm.add_widget(MainScreen(name='main'))
-        sm.add_widget(AdventureScreen(name='adventure'))
-        sm.add_widget(OptionsScreen(name='options'))
-        sm.add_widget(ShopScreen(name='shop'))
-        sm.add_widget(VirtualRoomScreen(name='virtual_room'))
+        sm.add_widget(MainScreen(name='main', game_manager=gs))
+        sm.add_widget(LoginScreen(name='login', game_manager=gs))
+        sm.add_widget(RegisterScreen(name='register', game_manager=gs))
+        sm.add_widget(AdventureScreen(name='adventure', game_manager=gs))
+        sm.add_widget(OptionsScreen(name='options', game_manager=gs))
+        sm.add_widget(ShopScreen(name='shop', game_manager=gs))
+        sm.add_widget(VirtualRoomScreen(name='virtual_room', game_manager=gs))
         return sm
 
 if __name__ == '__main__':
