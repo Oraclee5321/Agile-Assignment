@@ -1,0 +1,30 @@
+<DragLabel>
+    drag_rectangle: self.x, self.y, self.width, self.height
+    drag_timeout: 10000000
+    drag_distance: 0
+    color: 0, 0, 0, 1
+
+<AnswerBox>:
+    canvas:
+        Color:
+            rgba: 1, 0, 0, 1  # Red color
+        Rectangle:
+            pos: self.pos
+            size: self.width, self.height
+        Color:
+            rgba: 0.5, 0, 0, 1  # Darker red color
+        Rectangle:
+            pos: self.x + 10, self.y + 10  # Indent by 10 pixels
+            size: self.width - 20, self.height - 20  # Reduce size by 20 pixels
+
+<AnswerContainer@GridLayout>
+    #place on right side of screen
+    size_hint: 0.3, 1
+    pos_hint: {"right": 1, "center_y": 0.5}
+    padding: 10
+    cols: 1
+    rows: 5
+
+<DragScreen>
+    FloatLayout:
+        id: float
